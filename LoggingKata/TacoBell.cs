@@ -4,9 +4,11 @@ using System.Text;
 
 namespace LoggingKata
 {
-    public class TacoBell : ITrackable 
+    public class TacoBell : ITrackable
     {
-        public string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public Point Location { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string Name { get; set; }
+        public Point Location { get; set; }
+
+        
     }
 }

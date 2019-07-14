@@ -19,28 +19,29 @@ namespace LoggingKata.Test
         }
 
         [Theory]
-        [InlineData("Example")]
-        
+        [InlineData("32.571331,-85.499655,Taco Bell Auburn","Taco Bell Auburn", 32.571331, -85.499655)]
         [InlineData("33.59453,-86.694742,Taco Bell Birmingham", "Taco Bell Birmingham", 33.59453, -86.694742)]
-        public void ShouldParse(string str, string expectedname, double expectedlongitude, double expectedlatitude)
+        public void ShouldParse(string str, string expectedname, double expectedlatitude, double expectedlongitude)
         {
             // TODO: Complete Should Parse
 
             // Arrange
             TacoParser tacoparse = new TacoParser();
-            TacoBell taco = new TacoBell();
-            Point expectedtacolocation = new Point(expectedlongitude, expectedlatitude);
+            TacoBell tacoBell = new TacoBell();
+            Point expectedtacolocation = new Point(expectedlatitude, expectedlongitude);
             // Act
-            tacoparse.Parse(str);
+            tacoparse.Parse(str, tacoBell);
 
             // Assert
-            Assert.Equal(expectedname, taco.Name);
-            Assert.Equal(expectedtacolocation, taco.Location);
+            Assert.Equal(expectedname, tacoBell.Name);
+            Assert.Equal(expectedtacolocation.Latitude, tacoBell.Location.Latitude);
+            Assert.Equal(expectedtacolocation.Longitude, tacoBell.Location.Longitude);
             
         }
 
         [Theory]
-        [InlineData(null)]
+        [InlineData("32.571331,-85.499655Taco Bell Auburn")]
+        [InlineData("42424242, sifjsifsi, Taco Time")]
         [InlineData("")]
         public void ShouldFailParse(string str)
         {
@@ -48,11 +49,13 @@ namespace LoggingKata.Test
 
             // Arrange
             TacoParser badtacoparse = new TacoParser();
-
+            TacoBell badtaco = new TacoBell();
             // Act
-
+            badtacoparse.Parse(str, badtaco);
 
             // Assert
+            Assert.Equal(null, badtaco.Name);
+            
         }
     }
 }
