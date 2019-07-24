@@ -7,11 +7,11 @@
     {
         readonly ILog logger = new TacoLogger();
         
-        public ITrackable Parse(string line, TacoBell tacoBell)
+        public ITrackable Parse(string line)
         {
             logger.LogInfo("Begin parsing");
-            
-            
+
+            TacoBell tacoBell = new TacoBell();
             double longitude;
             double latitude;
             // Do not fail if one record parsing fails, return null
@@ -24,7 +24,7 @@
              {
                 // Log that and return null
                 logger.LogError("Array length incoreect.");
-
+                
                 return null;
              }
 
@@ -34,13 +34,17 @@
             string s_longitude = cells[1];
             // grab the name from your array at index 2
             tacoBell.Name = cells[2];
-
             // Your going to need to parse your string as a `double`
             // which is similar to parsing a string as an `int`
             logger.LogInfo("Changing longitude into a double");
-            double.TryParse(s_longitude, out longitude);
+            bool sucess = double.TryParse(s_longitude, out longitude);
             logger.LogInfo("Changing latitude into a double");
-            double.TryParse(s_latitude, out latitude);
+            bool Sucess = double.TryParse(s_latitude, out latitude);
+            if (Sucess == false || sucess == false)
+            {
+                logger.LogError("latitude or longitude is not a number");
+                return null;
+            }
 
             // You'll need to create a TacoBell class
             // that conforms to ITrackable
@@ -55,5 +59,6 @@
             // Since it conforms to ITrackable
             
         }
+        
     }
 }

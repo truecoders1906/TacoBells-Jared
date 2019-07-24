@@ -19,29 +19,31 @@ namespace LoggingKata.Test
         }
 
         [Theory]
-        [InlineData("32.571331,-85.499655,Taco Bell Auburn","Taco Bell Auburn", 32.571331, -85.499655)]
+        [InlineData("32.571331,-85.499655,Taco Bell Auburn", "Taco Bell Auburn", 32.571331, -85.499655)]
         [InlineData("33.59453,-86.694742,Taco Bell Birmingham", "Taco Bell Birmingham", 33.59453, -86.694742)]
+        
         public void ShouldParse(string str, string expectedname, double expectedlatitude, double expectedlongitude)
         {
             // TODO: Complete Should Parse
 
             // Arrange
             TacoParser tacoparse = new TacoParser();
-            TacoBell tacoBell = new TacoBell();
             Point expectedtacolocation = new Point(expectedlatitude, expectedlongitude);
+            
             // Act
-            tacoparse.Parse(str, tacoBell);
+            ITrackable actual =  tacoparse.Parse(str);
 
             // Assert
-            Assert.Equal(expectedname, tacoBell.Name);
-            Assert.Equal(expectedtacolocation.Latitude, tacoBell.Location.Latitude);
-            Assert.Equal(expectedtacolocation.Longitude, tacoBell.Location.Longitude);
+            Assert.Equal(expectedname, actual.Name);
+            Assert.Equal(expectedtacolocation.Latitude, actual.Location.Latitude);
+            Assert.Equal(expectedtacolocation.Longitude, actual.Location.Longitude);
             
         }
 
         [Theory]
         [InlineData("32.571331,-85.499655Taco Bell Auburn")]
-        [InlineData("42424242, sifjsifsi, Taco Time")]
+        [InlineData("42424242, sifjsifsi Taco Time")]
+        [InlineData("32.571331, Cheddar , Taco Bell Auburn")]
         [InlineData("")]
         public void ShouldFailParse(string str)
         {
@@ -49,12 +51,12 @@ namespace LoggingKata.Test
 
             // Arrange
             TacoParser badtacoparse = new TacoParser();
-            TacoBell badtaco = new TacoBell();
+            
             // Act
-            badtacoparse.Parse(str, badtaco);
+             ITrackable actual = badtacoparse.Parse(str);
 
             // Assert
-            Assert.Equal(null, badtaco.Name);
+            Assert.Null(actual);
             
         }
     }
